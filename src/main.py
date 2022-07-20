@@ -26,8 +26,6 @@ settings = WorldSettings(Q, R, alpha, max_distance)
 # Setup the world
 landmarks = [[np.random.uniform(0, 30), np.random.uniform(0, 30), int(i)] for i in range(3)]
 
-print(landmarks)
-
 world = World(settings, landmarks)
 
 if sys.argv[4] == "range-only":
@@ -63,6 +61,8 @@ if sys.argv[2] == "ekf":
     else:
         # Setup the SLAM object
         slam = EKFSLAM(len(landmarks), R, Q, dt=1)
+
+    # Initialize the slam state
     slam.set_state(mu)
 
 else:

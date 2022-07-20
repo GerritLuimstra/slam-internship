@@ -135,7 +135,6 @@ class RangeOnlyEKFSLAM:
                 mx, my = self.voting_grid.most_likely(l)
                 mu_prime[3 + 2*l]     = mx
                 mu_prime[3 + 2*l + 1] = my
-                print(mx, my)
 
             # Compute useful helpers
             dx = mu_prime[0] - mu_prime[3 + 2*l]
