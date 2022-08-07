@@ -1,5 +1,6 @@
 import numpy as np
 import math
+from helpers import wrap_angle_pi
 
 class RangeBearingSensor:
 
@@ -29,10 +30,7 @@ class RangeBearingSensor:
             z[2] = self.landmarks[i][2]
 
             # Wrap relative bearing
-            if z[1] > np.pi:
-                z[1] = z[1] - 2*np.pi
-            if z[1] < -np.pi:
-                z[1] = z[1] + 2*np.pi
+            z[1] = wrap_angle_pi(z[1])
 
             # Only add the measurement if it is in the field of view
             # and within range

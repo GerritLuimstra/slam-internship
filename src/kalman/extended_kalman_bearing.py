@@ -1,6 +1,6 @@
 import numpy as np
 import math
-from helpers import wrap_angle
+from helpers import wrap_angle, wrap_angle_pi
 
 class BearingExtendedKalmanFilter:
 
@@ -75,7 +75,7 @@ class BearingExtendedKalmanFilter:
             
             # Compute the expected observation
             z_hat = [q**0.5, np.arctan2(dy, dx) - mu_prime[2]]
-            z_hat[1] = wrap_angle(z_hat[1])
+            z_hat[1] = wrap_angle_pi(z_hat[1])
 
             # Compute the derivative of the measurement
             # with respect to the robot position

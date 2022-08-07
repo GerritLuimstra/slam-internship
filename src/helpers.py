@@ -15,3 +15,11 @@ def wrap_angle(angle):
     if angle < 0:
         angle = angle + 2*np.pi
     return angle
+
+def wrap_angle_pi(angle):
+    # ensures angle in [-pi, pi]
+    if angle > np.pi:
+        angle = angle - 2*np.pi
+    if angle < -np.pi:
+        angle = angle + 2*np.pi
+    return angle

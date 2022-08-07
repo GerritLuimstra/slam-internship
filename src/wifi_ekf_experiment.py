@@ -13,13 +13,13 @@ np.set_printoptions(suppress=True, precision=3)
 np.random.seed(42)
 
 # Setup the world settings
-R = np.diag([0.1, 0.1, 0])**2
+R = np.diag([0.2, 0.2, np.pi/36])
 
 if sys.argv[2] == "range-only":
     Q = 1
 else:
     Q = np.array([
-        [1, 0], [0, 0.01]
+        [.1, 0], [0, (2*np.pi)/180]
     ])
 
 alpha = np.pi
@@ -63,7 +63,17 @@ if sys.argv[1] == "visualize":
 
 else:
     
-    # Measure the error
-    mean_position_error = measure_error(world, trajectory, filter, filter=True)
+    for distance_noise in [.1, .2, .3, .4, .5, 1, 2]:
+        for angular_noise in [1, 2, 3, 4, 5, 10]:
 
-    print(mean_position_error)
+            Q = np.array([
+                [distance_noise, 0], [0, (angular_noise*np.pi)/180]
+            ])
+            world.settings.Q = Q
+            filter.Q = Q
+            sensor.Q = Q
+
+            # Measure the error
+            mean_position_error = measure_error(world, trajectory, filter, filter=True)
+
+            print(distance_noise, angular_noise, mean_position_error)
