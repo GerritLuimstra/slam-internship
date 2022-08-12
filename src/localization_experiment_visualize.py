@@ -13,13 +13,13 @@ np.set_printoptions(suppress=True, precision=3)
 # np.random.seed(42)
 
 # Setup the world settings
-R = np.diag([0.1, 0.1, 0.1])
+R = np.diag([0.1, 0.1, (10*np.pi)/180])
 
 if sys.argv[1] == "range-only":
-    Q = 1
+    Q = 0.2
 else:
     Q = np.array([
-        [10, 0], [0, (10*np.pi)/180]
+        [1, 0], [0, (10*np.pi)/180]
     ])
 
 alpha = np.pi
@@ -27,7 +27,7 @@ max_distance = np.inf
 settings = WorldSettings(Q, R, alpha, max_distance)
 
 # Setup the world
-landmarks = [[np.random.uniform(0, 30), np.random.uniform(0, 30), int(i)] for i in range(5)]
+landmarks = [[np.random.uniform(0, 30), np.random.uniform(0, 30), int(i)] for i in range(20)]
 world = World(settings, landmarks)
 
 if sys.argv[1] == "range-only":

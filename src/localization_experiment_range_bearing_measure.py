@@ -9,23 +9,26 @@ from error import measure_error
 from pprint import pprint
 import tqdm
 import sys
+import matplotlib.pyplot as plt
 
-TRIES = 5
+TRIES = 1
 
 # Setup global options
 np.set_printoptions(suppress=True, precision=3)
-# np.random.seed(42)
+np.random.seed(42)
 
 # Setup the world settings
 R = np.diag([0.1, 0.1, (5*np.pi)/180])
 
 # Setup the landmarks
-landmarks = [[np.random.uniform(0, 30), np.random.uniform(0, 30), int(i)] for i in range(20)]
+landmarks = [[np.random.uniform(0, 30), np.random.uniform(0, 30), int(i)] for i in range(5)]
 
-noise_matrix = {}
+distance_noises = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+angle_noises = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+noise_matrix = np.zeros((len(distance_noises), len(angle_noises)))
 
-for distance_noise in tqdm.tqdm([1, 2, 3, 4, 5, 6, 7]):
-    for angle_noise in tqdm.tqdm([1, 2, 3, 4, 5, 6, 7]):
+for d_idx, distance_noise in tqdm.tqdm(enumerate(distance_noises)):
+    for a_idx, angle_noise in tqdm.tqdm(enumerate(angle_noises)):
 
         measurement_errors = []
         for _ in range(TRIES):
@@ -39,21 +42,11 @@ for distance_noise in tqdm.tqdm([1, 2, 3, 4, 5, 6, 7]):
             settings = WorldSettings(Q, R, alpha, max_distance)
             world = World(settings, landmarks)
 
-            if sys.argv[1] == "range-only":
+            # Setup the sensor
+            sensor = RangeBearingSensor(landmarks, Q, alpha, max_distance)
 
-                # Setup the sensor
-                sensor = RangeOnlySensor(landmarks, Q, max_distance)
-
-                # Setup the filter
-                filter = WiFiExtendedKalmanFilter(landmarks, R, Q, dt=1)
-
-            else:
-
-                # Setup the sensor
-                sensor = RangeBearingSensor(landmarks, Q, alpha, max_distance)
-
-                # Setup the filter
-                filter = BearingExtendedKalmanFilter(landmarks, R, Q, dt=1)
+            # Setup the filter
+            filter = BearingExtendedKalmanFilter(landmarks, R, Q, dt=1)
 
             # Obtain a trajectory
             trajectory = square_trajectory(sensor, None, add_noise=False)
@@ -69,6 +62,16 @@ for distance_noise in tqdm.tqdm([1, 2, 3, 4, 5, 6, 7]):
             mean_position_error = measure_error(world, trajectory, filter, filter=True)
             measurement_errors.append(mean_position_error)
 
-        noise_matrix[(distance_noise, angle_noise)] = np.mean(np.array(measurement_errors))
+        noise_matrix[d_idx, a_idx] = np.mean(np.array(measurement_errors))
 
-pprint(noise_matrix)
+
+plt.title("Noise Matrix for Range-Only Localization")
+plt.imshow(noise_matrix, cmap='Greys')
+plt.colorbar(fraction=0.03, pad=0.05)
+plt.xlabel("Angle Noise in Degrees")
+plt.ylabel("Distance noise")
+for j in range(len(distance_noises)):
+    for i in range(len(angle_noises)):
+        c = noise_matrix[j,i]
+        plt.text(i, j, str(round(c, 2)), va='center', ha='center')
+plt.show()
