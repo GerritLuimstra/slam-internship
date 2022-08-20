@@ -21,7 +21,7 @@ np.random.seed(42)
 R = np.diag([0.1, 0.1, (5*np.pi)/180])
 
 # Setup the landmarks
-landmarks = [[np.random.uniform(0, 30), np.random.uniform(0, 30), int(i)] for i in range(5)]
+landmarks = [[np.random.uniform(0, 30), np.random.uniform(0, 30), int(i)] for i in range(20)]
 
 distance_noises = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 angle_noises = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]

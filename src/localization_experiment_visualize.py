@@ -10,16 +10,16 @@ import sys
 
 # Setup global options
 np.set_printoptions(suppress=True, precision=3)
-# np.random.seed(42)
+np.random.seed(1337)
 
 # Setup the world settings
-R = np.diag([0.1, 0.1, (10*np.pi)/180])
+R = np.diag([0.01, 0.01, (5*np.pi)/180])
 
 if sys.argv[1] == "range-only":
-    Q = 0.2
+    Q = 0.1
 else:
     Q = np.array([
-        [1, 0], [0, (10*np.pi)/180]
+        [0.1, 0], [0, (5*np.pi)/180]
     ])
 
 alpha = np.pi

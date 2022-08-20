@@ -31,7 +31,7 @@ for d_idx, distance_noise in tqdm.tqdm(enumerate(distance_noises)):
         measurement_errors = []
         for _ in range(TRIES):
 
-            Q = distance_noise * 0.1
+            Q = distance_noise
 
             alpha = np.pi
             max_distance = np.inf
